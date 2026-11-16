@@ -1,0 +1,190 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": 1
+    },
+    "plan_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_id",
+        "revision",
+        "sha256"
+      ]
+    },
+    "target_node_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+      },
+      "maxItems": 1000
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 12000
+    },
+    "state": {
+      "enum": [
+        "prepared",
+        "handed_off",
+        "running",
+        "stop_requested",
+        "stopped",
+        "succeeded",
+        "failed",
+        "unknown"
+      ]
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "running",
+              "succeeded",
+              "failed",
+              "unknown",
+              "skipped"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "operation_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "result_ref": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "object_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "object_id",
+                  "revision",
+                  "sha256"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "agent_report",
+                  "core_receipt",
+                  "external_receipt"
+                ]
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 2000
+              }
+            },
+            "required": [
+              "kind",
+              "locator"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "message",
+          "operation_key",
+          "result_ref",
+          "evidence"
+        ]
+      },
+      "maxItems": 200
+    },
+    "continuation": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 12000
+    }
+  },
+  "required": [
+    "format_version",
+    "plan_ref",
+    "target_node_ids",
+    "goal",
+    "state",
+    "steps",
+    "continuation"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HetuDesignNovelPlanRun"
+}

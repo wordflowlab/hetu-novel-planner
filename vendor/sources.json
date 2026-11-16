@@ -1,0 +1,19 @@
+{
+  "source_repository": "https://github.com/limecloud/hetu",
+  "revision": "0c9883f9b9fc53ab2cf082019ea4b46fd9b5962b",
+  "worktree": "local SDK and shared stylesheet snapshot; file digests identify vendored bytes",
+  "files": [
+    {
+      "file": "radix-workbench.css",
+      "sha256": "ccf9f4d25676a4225180128d05a3d0a9d26e92fa832fdccb7d80c4d52ee4b625"
+    },
+    {
+      "file": "hetu-sdk.ts",
+      "sha256": "d14d545a95b4ba6e5f181e44d118e553b62355a4bf5ce2628e1ea7d67a3e3136"
+    },
+    {
+      "file": "hetu-LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    }
+  ]
+}

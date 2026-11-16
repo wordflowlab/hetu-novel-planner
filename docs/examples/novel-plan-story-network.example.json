@@ -1,0 +1,95 @@
+{
+  "format_version": 1,
+  "plan_id": "ext_plan_design_only",
+  "entities": [
+    {
+      "id": "person-1",
+      "type": "character",
+      "name": "林遥",
+      "summary": "负责档案修复的调查者。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    },
+    {
+      "id": "person-2",
+      "type": "character",
+      "name": "陈伯",
+      "summary": "保管退信的守港人。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    },
+    {
+      "id": "faction-1",
+      "type": "faction",
+      "name": "旧邮局",
+      "summary": "旧寄递记录的保管方。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    },
+    {
+      "id": "place-1",
+      "type": "location",
+      "name": "东堤码头",
+      "summary": "已停用的邮路终点。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    },
+    {
+      "id": "item-1",
+      "type": "item",
+      "name": "旧信",
+      "summary": "来自停用支局的信件。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    },
+    {
+      "id": "rule-1",
+      "type": "rule",
+      "name": "双人签收制",
+      "summary": "历史寄递核对的制度线索。",
+      "notes": "规划候选，尚未建立正式设定。",
+      "archived": false,
+      "canonical_ref": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "relation-1",
+      "from_id": "person-1",
+      "to_id": "person-2",
+      "label": "互相试探的合作者",
+      "notes": "关系随调查变化。",
+      "node_ids": [
+        "volume-1"
+      ],
+      "archived": false
+    }
+  ],
+  "clues": [
+    {
+      "id": "clue-1",
+      "title": "缺失的签收栏",
+      "description": "登记簿上的一处异常。",
+      "status": "developing",
+      "placements": [
+        {
+          "node_id": "chapter-1",
+          "stage": "plant",
+          "notes": "首次看到缺页。"
+        },
+        {
+          "node_id": "chapter-2",
+          "stage": "hint",
+          "notes": "核对码头编号。"
+        }
+      ],
+      "notes": "回收位置待确认。",
+      "archived": false
+    }
+  ]
+}

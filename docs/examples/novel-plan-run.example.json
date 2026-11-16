@@ -1,0 +1,28 @@
+{
+  "format_version": 1,
+  "plan_ref": {
+    "object_id": "ext_plan_design_only",
+    "revision": 1,
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "target_node_ids": [
+    "volume-1"
+  ],
+  "goal": "展开第一卷的章节与详细剧情。",
+  "state": "prepared",
+  "steps": [
+    {
+      "id": "step-1",
+      "title": "读取作者主张与固定来源",
+      "status": "pending",
+      "message": "设计示例，尚未执行。",
+      "operation_key": null,
+      "result_ref": null,
+      "evidence": {
+        "kind": "agent_report",
+        "locator": ""
+      }
+    }
+  ],
+  "continuation": "先发现实际能力，核对固定规划后继续。"
+}

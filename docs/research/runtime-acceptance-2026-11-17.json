@@ -1,0 +1,130 @@
+{
+  "recorded_on": "2026-11-17",
+  "platform": "macOS arm64",
+  "package_sha256": "05c6e9a51a16867a01225a1d296c692c2b4abda8b11d05fbc5c43fb0e8d6d4e8",
+  "machine": {
+    "status": "passed",
+    "professional_actions": 21,
+    "test_count": 7,
+    "actor": "agent",
+    "actions": [
+      "put_plan",
+      "get_plan",
+      "list_plans",
+      "insert_node",
+      "move_node",
+      "patch_node",
+      "archive_node",
+      "get_node",
+      "put_story_network",
+      "attach_object",
+      "put_detail",
+      "get_detail",
+      "get_story_network",
+      "query_nodes",
+      "compare_revisions",
+      "check_plan",
+      "put_run",
+      "patch_run",
+      "request_stop",
+      "get_progress",
+      "export_plan",
+      "hetu.capabilities.get",
+      "hetu.novels.snapshot"
+    ]
+  },
+  "unit_application_recovery": {
+    "passed": 13,
+    "failed": 0
+  },
+  "electron": {
+    "status": "passed",
+    "checks": [
+      "real_electron",
+      "standalone_full_width",
+      "volume_list_layout",
+      "fixed_goal_search",
+      "empty_filter",
+      "list_keyboard",
+      "plot_work_records",
+      "trusted_back",
+      "failed_flush_keeps_view",
+      "return_restores_layout",
+      "hot_disable_restores_layout",
+      "machine_gui_same_revision",
+      "save_meta_detail_attach",
+      "ime_no_submission",
+      "switch_preserves_draft",
+      "close_reopen_recovery",
+      "three_way_cas_merge",
+      "native_fixed_export",
+      "modal_escape",
+      "scope_links",
+      "actual_statistics",
+      "trusted_handoff",
+      "relationship_table",
+      "light_dark",
+      "zh_en",
+      "narrow"
+    ]
+  },
+  "local_installation": {
+    "status": "active",
+    "current_session_readback": "passed",
+    "desktop_version": "0.10.0",
+    "public_install_state_readback": "passed"
+  },
+  "boundaries": [
+    "Windows、Linux、干净系统、真实系统输入法和完整无障碍未验证",
+    "2560px为工作面视口验证，不是物理窗口证据；Computer Use服务不可用",
+    "未调用付费模型、未测生成成本、未修改作者作品",
+    "发行按开发预览交付；不声明完整首版全部56项验收通过"
+  ],
+  "latest_tests": {
+    "passed": 20,
+    "failed": 0,
+    "cancelled": 0,
+    "duration_ms": 190678,
+    "electron_passed": 1,
+    "electron_duration_seconds": 31
+  },
+  "host_source_commit": "a9c3551c54aac849365eba2e8088c7427ff6966a",
+  "visual_review": {
+    "kind": "design_judgment",
+    "viewports": [
+      2560,
+      1360,
+      760
+    ],
+    "scores": {
+      "layout": 9,
+      "alignment": 9,
+      "typography": 9,
+      "colors": 9,
+      "controls": 9,
+      "interaction": 9
+    },
+    "evidence": [
+      {
+        "file": "plan-light.png",
+        "sha256": "a11e143fdacd21223b2879d705376323f6316d434a4899cc57c42ed3da883a03"
+      },
+      {
+        "file": "plan-wide.png",
+        "sha256": "4ccb01910a197c1dc183d06c4e4835003e6dfd77ff53379095ab67e5448be0ca"
+      },
+      {
+        "file": "plan-dark.png",
+        "sha256": "684828e7ea11a21e561fc966e4afe55ab7ffd9c91afec3045a3d00ead7f45f7b"
+      },
+      {
+        "file": "plan-narrow.png",
+        "sha256": "2536a0d06571c318d8059cfcbcecc75fd2dfad2f808950a8db51f6ea322529cf"
+      },
+      {
+        "file": "plot-progress.png",
+        "sha256": "91d2124cdba4852d2063558def7bc76563b841c39a1044ec8985909ce057e0a6"
+      }
+    ]
+  }
+}

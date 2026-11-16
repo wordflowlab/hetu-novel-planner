@@ -1,0 +1,248 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": 1
+    },
+    "plan_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "type": {
+            "enum": [
+              "character",
+              "faction",
+              "location",
+              "item",
+              "rule"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "canonical_ref": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_index": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "entity_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                  }
+                },
+                "required": [
+                  "source_index",
+                  "entity_ref"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "name",
+          "summary",
+          "notes",
+          "archived",
+          "canonical_ref"
+        ]
+      },
+      "maxItems": 500
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "from_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "to_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "node_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+            },
+            "maxItems": 1000
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "from_id",
+          "to_id",
+          "label",
+          "notes",
+          "node_ids",
+          "archived"
+        ]
+      },
+      "maxItems": 1000
+    },
+    "clues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "status": {
+            "enum": [
+              "open",
+              "developing",
+              "resolved",
+              "abandoned"
+            ]
+          },
+          "placements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+                },
+                "stage": {
+                  "enum": [
+                    "plant",
+                    "hint",
+                    "payoff"
+                  ]
+                },
+                "notes": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 12000
+                }
+              },
+              "required": [
+                "node_id",
+                "stage",
+                "notes"
+              ]
+            },
+            "maxItems": 300
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 12000
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "status",
+          "placements",
+          "notes",
+          "archived"
+        ]
+      },
+      "maxItems": 500
+    }
+  },
+  "required": [
+    "format_version",
+    "plan_id",
+    "entities",
+    "relations",
+    "clues"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HetuDesignNovelPlanStoryNetwork"
+}

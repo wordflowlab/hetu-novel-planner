@@ -1,0 +1,70 @@
+{
+  "format_version": 1,
+  "root_id": "book-1",
+  "author_constraints": "保留开放式结尾；调查线不使用超自然解答。",
+  "nodes": [
+    {
+      "id": "book-1",
+      "level": "book",
+      "title": "雨港来信",
+      "subtitle": "",
+      "planning_status": "unplanned",
+      "children": [
+        "volume-1"
+      ],
+      "archived": false,
+      "target_chapters": 24,
+      "target_words": 72000,
+      "detail_ref": null
+    },
+    {
+      "id": "volume-1",
+      "level": "volume",
+      "title": "消失的邮戳",
+      "subtitle": "一封晚到十年的信",
+      "planning_status": "planning",
+      "children": [
+        "chapter-1",
+        "chapter-2"
+      ],
+      "archived": false,
+      "target_chapters": 12,
+      "target_words": 36000,
+      "detail_ref": {
+        "object_id": "ext_detail_design_only",
+        "revision": 1,
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "id": "chapter-1",
+      "level": "chapter",
+      "title": "旧信抵达",
+      "subtitle": "",
+      "planning_status": "unplanned",
+      "children": [],
+      "archived": false,
+      "target_chapters": 0,
+      "target_words": 0,
+      "detail_ref": null
+    },
+    {
+      "id": "chapter-2",
+      "level": "chapter",
+      "title": "停用的码头",
+      "subtitle": "",
+      "planning_status": "unplanned",
+      "children": [],
+      "archived": false,
+      "target_chapters": 0,
+      "target_words": 0,
+      "detail_ref": null
+    }
+  ],
+  "story_ref": {
+    "object_id": "ext_network_design_only",
+    "revision": 1,
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "run_ids": []
+}
