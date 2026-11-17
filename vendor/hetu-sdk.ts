@@ -1,4 +1,5 @@
 /** 插件仅消费语言无关的作品合同；局部渲染不调用 Core。 */
+export { ProjectStore, ProjectError, requireValue, canonical, clone, fixed, success, failure, data } from './project-store.ts';
 export interface WorkRef {
   workspace_id: string;
   kind: "novel" | "drama" | "video";
@@ -23,6 +24,13 @@ export interface ActionContribution {
   input_schema: Record<string, unknown>;
   effect: "read" | "managed_write";
 }
+/** 由插件包拥有的方法；通过宿主按需读取，不注册新的客户端插件。 */
+export interface SkillContribution {
+  id: string;
+  name: string;
+  description: string;
+  entry: string;
+}
 export interface PluginManifest {
   manifest_version: 1;
   host_api: "1";
@@ -32,12 +40,15 @@ export interface PluginManifest {
   description: Record<"zh-CN" | "en", string>;
   license: string;
   dependencies: { id: string; version: string }[];
+  /** 工作面适用范围；省略兼容全部作品类型，不改变作品授权。 */
+  work_kinds?: WorkRef["kind"][];
   /** 历史清单字段；开放宿主不据此限制核心能力。 */
   permissions?: ("objects.read" | "objects.write" | "work.read")[];
   contributions: {
     views: ViewContribution[];
     data: TypeContribution[];
     actions: ActionContribution[];
+    skills?: SkillContribution[];
   };
   runtime?: { entry: string };
 }
@@ -86,7 +97,7 @@ export interface PluginBridge {
   /** 关闭视图前完成恢复稿；拒绝时保留当前视图。 */
   onBeforeClose?(callback: () => void | Promise<void>): () => void;
   /** 桌面工作面服务；handoff只返回已复制，不返回私密授权。 */
-  host?(action: "preferences" | "handoff" | "open_document" | "open_work" | "work_snapshot" | "export_file" | "close_view", input: Record<string, unknown>): Promise<unknown>;
+  host?(action: "preferences" | "handoff" | "open_document" | "open_work" | "work_snapshot" | "export_file" | "save_artifact" | "media_open" | "media_release" | "close_view", input: Record<string, unknown>): Promise<unknown>;
   onPreferences?(callback: (value: {theme:string;language:string}) => void): () => void;
   invoke(action: string, input: Record<string, unknown>): Promise<unknown>;
   request<T = Record<string, unknown>>(
@@ -144,6 +155,10 @@ export function sameWork(left: unknown, right: WorkRef): boolean {
     ref.kind === right.kind &&
     ref.object_id === right.object_id
   );
+}
+
+export function supportsWork(manifest: Pick<PluginManifest, "work_kinds">, work: WorkRef): boolean {
+  return manifest.work_kinds === undefined || manifest.work_kinds.includes(work.kind);
 }
 
 /** 核心服务不依赖 Electron 或 Cordis；Schema 以当前入口能力发现为准。 */

@@ -1,16 +1,22 @@
 {
   "name": "@wordflowlab/hetu-novel-planner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "Apache-2.0",
-  "engines": { "node": ">=25 <26" },
+  "engines": {
+    "node": ">=25 <26"
+  },
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs && node scripts/build-continuity.mjs",
     "check": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "test:ui": "playwright test",
-    "verify": "npm run check && npm test && npm run build"
+    "verify": "npm run check && npm test && npm run build",
+    "test:continuity": "node --experimental-strip-types --test tests/continuity-v2.test.ts",
+    "test:unit": "node --experimental-strip-types --test tests/domain.test.ts tests/application.test.ts tests/write-flow.test.ts tests/continuity-v2.test.ts",
+    "test:machine": "npm run build && node --experimental-strip-types --test tests/machine.integration.test.ts tests/continuity-v2.machine.ts",
+    "package": "npm run build && node scripts/package.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0",

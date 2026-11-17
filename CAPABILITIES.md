@@ -36,3 +36,16 @@
 安装与动态发现由河图负责，不为本插件新建Codex插件或独立MCP服务。插件附带方法文件不表示已向Codex自动安装Skill；按需读取[包内方法](methods/README.md)，分发边界见[架构](docs/02-总体架构与技术选型.md)。
 
 首版必须覆盖NP-01～26及[首版功能规格](docs/11-首版功能规格与发布门槛.md)。工作包分步实施不缩减首版发布范围；缺少宿主桥接时作为阻断登记。
+
+## 剧情决策与时间线
+
+- `list_continuities`：查找连续性方案（read）。
+- `get_continuity`：读取固定连续性方案（read）。
+- `save_continuity`：保存连续性方案（managed_write）。
+- `put_decision`：维护剧情方向（managed_write）。
+- `put_event`：维护故事事件（managed_write）。
+- `put_state`：维护人物状态（managed_write）。
+- `get_timeline`：读取双时间线（read）。
+- `build_continuation_context`：准备固定续写上下文（read）。
+
+方法见同包Skill的 references/continuity-v2.md。

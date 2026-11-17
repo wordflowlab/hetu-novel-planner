@@ -1,0 +1,170 @@
+@import "../../vendor/radix-workbench.css";
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--workbench-background);
+  background-attachment: fixed;
+  color: var(--ink);
+  font: 14px/1.65 system-ui;
+}
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+button,
+select {
+  font: inherit;
+  color: inherit;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 0.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 5px;
+}
+button {
+  cursor: pointer;
+}
+button:hover {
+  background: var(--hover);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.primary {
+  background: var(--action);
+  color: var(--action-ink);
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 18px;
+  min-height: 50px;
+  border-bottom: 0.5px solid var(--line);
+  background: var(--chrome-surface);
+}
+header select {
+  max-width: 300px;
+}
+header .primary {
+  margin-left: auto;
+}
+h1,
+h3,
+h4 {
+  font-size: 14px;
+  margin: 0;
+}
+h2 {
+  font-size: 20px;
+  margin: 0 0 12px;
+}
+nav {
+  display: flex;
+  gap: 8px;
+  padding: 8px 18px;
+  border-bottom: 0.5px solid var(--line);
+  background: var(--chrome-surface);
+}
+nav button {
+  border: 0;
+  background: transparent;
+}
+nav button[aria-current] {
+  background: var(--jade-3);
+  color: var(--jade-11);
+}
+main {
+  flex: 1;
+  width: 100%;
+  padding: 28px 32px;
+  background: var(--workbench-panel);
+}
+p {
+  margin: 8px 0 12px;
+}
+article {
+  max-width: 1100px;
+  padding: 20px 0;
+  border-bottom: 0.5px solid var(--line);
+}
+.compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin: 16px 0;
+}
+.compare section {
+  padding: 12px 0;
+  border-top: 0.5px solid var(--line);
+}
+blockquote {
+  margin: 12px 0;
+  padding: 8px 16px;
+  border-left: 0.5px solid var(--line);
+  background: var(--paper);
+}
+small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+}
+.muted,
+footer {
+  color: var(--muted);
+}
+footer {
+  font-size: 12px;
+  padding: 16px 32px;
+  border-top: 0.5px solid var(--line);
+}
+[role="alert"] {
+  padding: 12px 20px;
+  background: var(--danger);
+  color: var(--danger-ink);
+}
+.status {
+  margin: 0;
+  padding: 8px 20px;
+  background: var(--jade-2);
+  color: var(--jade-11);
+}
+@media (max-width: 760px) {
+  header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+  header .primary {
+    margin-left: 0;
+  }
+  header select {
+    max-width: 220px;
+  }
+  main {
+    padding: 20px 16px;
+  }
+  nav {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  body {
+    background: var(--page);
+  }
+  header,
+  main,
+  nav {
+    background: var(--surface);
+  }
+}

@@ -1,6 +1,13 @@
+await import('./generate-continuity.mjs');
 import { build } from 'esbuild';
-import { mkdir, copyFile, readFile, writeFile, readdir } from 'node:fs/promises';
+import { mkdir, copyFile, readFile, writeFile, readdir, cp } from 'node:fs/promises';
 import path from 'node:path';
+const {createHash} = await import("node:crypto");
+const sources = JSON.parse(await readFile("vendor/sources.json","utf8"));
+for (const file of sources.files) {
+  const digest=createHash("sha256").update(await readFile("vendor/"+file.file)).digest("hex");
+  if(digest!==file.sha256)throw new Error("SDK快照不符："+file.file);
+}
 const manifest = JSON.parse(await readFile('contracts/plugin-manifest.json','utf8'));
 await mkdir('dist',{recursive:true});
 const backend=await build({entryPoints:['src/backend.ts'],outfile:'dist/backend.mjs',bundle:true,platform:'node',format:'esm',target:'node25',metafile:true,banner:{js:'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);'}});
@@ -40,3 +47,5 @@ for (const data of manifest.contributions.data) {
   await writeFile('docs/examples/'+prefix+'.schema.json',JSON.stringify(data.schema,null,2)+'\n');
 }
 await writeFile('docs/examples/plugin-manifest.design.json',JSON.stringify(manifest,null,1)+'\n');
+
+await cp('skills','dist/skills',{recursive:true});

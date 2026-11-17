@@ -1,0 +1,21 @@
+{
+  "platform": "darwin arm64",
+  "package_sha256": "25a06f113dc05cc0b22ea996f5c5c163642026658f9cc8bf69981ac4da42e0c4",
+  "actions": [
+    "skills.read",
+    "put_plan",
+    "save_continuity",
+    "put_decision",
+    "put_event",
+    "put_state",
+    "get_timeline",
+    "build_continuation_context",
+    "list_continuities",
+    "get_continuity"
+  ],
+  "candidate_source": true,
+  "cli_mcp": true,
+  "hotplug": true,
+  "uninstall_reinstall": true,
+  "windows": false
+}

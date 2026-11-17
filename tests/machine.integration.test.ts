@@ -43,7 +43,7 @@ test('标准小说规划包通过稳定MCP完成四类对象、全部专业动�
    const created=await ok('hetu_create_novel_from_project',{management_ref:start.management_ref,project_id:start.project.project_id,expected:{revision:start.revision,sha256:start.sha256},target_path:start.target_path,metadata:{title:'雨港来信',author_name:'验收作者',synopsis:'旧邮局的来信。',genre:'悬疑',language_tag:'zh-CN',status:'writing'},operation_key:'create'});
    management=created.workspace_management_ref;work={workspace_id:management.scope_ref.id,kind:'novel',object_id:created.novel.novel_id};
    pkg=await ok('hetu_plugins_inspect_package',{package_directory:path.resolve('dist')});await apply('install');await discover();
-   assert.equal(cap.actions.length,21);assert.ok(cap.core_actions.some((a:any)=>a.name==='hetu.novels.snapshot'));assert.deepEqual((await client.listTools()).tools.map((x:any)=>x.name),tools);
+   assert.equal(cap.actions.length,manifest.contributions.actions.length);assert.ok(cap.core_actions.some((a:any)=>a.name==='hetu.novels.snapshot'));assert.deepEqual((await client.listTools()).tools.map((x:any)=>x.name),tools);
    const content=newPlan('雨港来信','book');content.nodes.push(newNode('volume','第一卷','volume-a'),newNode('volume','第二卷','volume-b'));content.nodes[0].children=['volume-a','volume-b'];content.author_constraints='保留开放结局。';
    plan=await invoke('put_plan',{title:'雨港方案',content,source_refs:[],expected_revision:0,expected_sha256:'',operation_key:'create-plan'});
    assert.equal((await invoke('get_plan',{object_id:plan.object.object_id,revision:1})).sha256,plan.sha256);
@@ -107,7 +107,7 @@ test('标准小说规划包通过稳定MCP完成四类对象、全部专业动�
    await apply('enable');await discover();assert.equal((await invoke('get_plan',{object_id:plan.object.object_id})).sha256,plan.sha256);
    assert.equal(cap.access_mode,'open');assert.equal(binding.grant_id,undefined);
   });
-  assert.deepEqual([...actions].filter(x=>!x.startsWith('hetu.')).sort(),manifest.contributions.actions.map(a=>a.id).sort());
+  assert.deepEqual([...actions].filter(x=>!x.startsWith('hetu.')).sort(),manifest.contributions.actions.filter(a=>!["list_continuities", "get_continuity", "save_continuity", "put_decision", "put_event", "put_state", "get_timeline", "build_continuation_context"].includes(a.id)).map(a=>a.id).sort());
   await mkdir('output',{recursive:true});await writeFile('output/machine-acceptance.json',JSON.stringify({recorded_at:new Date().toISOString(),platform:process.platform,package_sha256:pkg.package_sha256,actions:[...actions],directory,plan_ref:fixed(plan),status:'passed',boundaries:['真实稳定MCP与Core；桌面未启动','未证明Windows运行或GUI完整验收']},null,2));
  }finally{await client.close();}
 });

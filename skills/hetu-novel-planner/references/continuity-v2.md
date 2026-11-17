@@ -1,0 +1,7 @@
+# 剧情决策与时间线
+
+先读整书规划、已有小说与当前连续性。使用list_continuities/get_continuity检查已有成果；新建save_continuity需要固定plan_ref，不用当前最新版本偷换旧依据。
+
+put_decision比较至少两个真正不同的后续方向，明确代价、承诺和影响；selected_option_id只是规划取舍。put_event分开故事时间与叙事顺序，缺时间保留null；put_state将人物知情与身体/立场状态锚定确切事件和来源。get_timeline按显式顺序阅读，不从文本排序推造日期。
+
+build_continuation_context提供固定计划、状态、方向和来源。外部Agent据此通过宿主准备续写任务和不可变候选；作者反馈、正文采纳与定稿仍沿宿主。写入携带CAS和原键，未知get_operation先回读，冲突保留输入。旧规划更新后显式另建新依据，不静默漂移。
