@@ -1,6 +1,6 @@
 {
   "platform": "darwin arm64",
-  "package_sha256": "25a06f113dc05cc0b22ea996f5c5c163642026658f9cc8bf69981ac4da42e0c4",
+  "package_sha256": "2e05158d8ee1076370e3d186491fdc83083cb3a19e8f66ff6ef3452aacadd1e9",
   "actions": [
     "skills.read",
     "put_plan",

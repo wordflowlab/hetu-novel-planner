@@ -19,8 +19,10 @@ const base=(r:any)=>({object_id:r.object.object_id,expected_revision:r.object.re
 
 test('标准小说规划包通过稳定MCP完成四类对象、全部专业动作、开放核心与恢复',{timeout:600000},async t=>{
  const directory=await mkdtemp(path.join(os.tmpdir(),'novel-planner-machine-'));
- const bin=path.join(host,'target/debug');
- const env={...process.env,HETU_PLUGIN_STATE_DIR:path.join(directory,'plugins'),HETU_PLUGIN_ACCESS_DIR:path.join(directory,'access'),HETU_PLUGIN_NODE:process.execPath,HETU_PLUGIN_CLI:path.join(bin,'hetu-plugin'),HETU_PLUGIN_MANAGER:path.join(host,'apps/desktop/dist/plugin-manager.mjs')};
+ const bin=process.env.HETU_TEST_BIN??path.join(host,'target/debug');
+ const packageDirectory=path.resolve(process.env.HETU_TEST_PACKAGE??'dist');
+ const env:NodeJS.ProcessEnv={...process.env,HETU_PLUGIN_STATE_DIR:path.join(directory,'plugins'),HETU_PLUGIN_ACCESS_DIR:path.join(directory,'access'),HETU_PLUGIN_NODE:process.execPath,HETU_PLUGIN_CLI:path.join(bin,'hetu-plugin'),HETU_PLUGIN_MANAGER:path.join(host,'apps/desktop/dist/plugin-manager.mjs')};
+ if(process.env.HETU_PACKAGED_APP){assert.ok(process.env.HETU_TEST_BIN);for(const key of ['HETU_PLUGIN_NODE','HETU_PLUGIN_CLI','HETU_APP_SERVER','HETU_PLUGIN_MANAGER','HETU_CLI','ELECTRON_RUN_AS_NODE'])delete env[key];}
  const client=new Client({name:'novel-planner-acceptance',version:'1'},{versionNegotiation:{mode:{pin:'2026-07-28'}}});
  await client.connect(new StdioClientTransport({command:path.join(bin,'hetu-mcp'),args:['--client','codex','--collaboration-dir',path.join(directory,'hub')],env,stderr:'pipe'}));
  const call=async(name:string,args:any={})=>(await client.callTool({name,arguments:args})).structuredContent as any;
@@ -31,7 +33,7 @@ test('标准小说规划包通过稳定MCP完成四类对象、全部专业动�
   if(!success)return outer;
   assert.equal(outer.status,'succeeded',JSON.stringify(outer));const result=outer.data.result;assert.equal(result.status,'succeeded',JSON.stringify(result));actions.add(action);return result.data;
  };
- const apply=async(action:string)=>ok('hetu_plugins_apply',{action,plugin_id:manifest.id,package_directory:path.resolve('dist'),package_sha256:pkg.package_sha256,expected_sha256:(await ok('hetu_plugins_inspect')).state_sha256,authorization_note:'隔离验收明确选择此固定包。',operation_key:'installation-'+ ++serial});
+ const apply=async(action:string)=>ok('hetu_plugins_apply',{action,plugin_id:manifest.id,package_directory:packageDirectory,package_sha256:pkg.package_sha256,expected_sha256:(await ok('hetu_plugins_inspect')).state_sha256,authorization_note:'隔离验收明确选择此固定包。',operation_key:'installation-'+ ++serial});
  const discover=async()=>{
   binding={management_ref:management,work_ref:work,plugin_id:manifest.id,package_sha256:pkg.package_sha256};
   cap=await ok('hetu_plugins_capabilities',binding);
@@ -42,7 +44,7 @@ test('标准小说规划包通过稳定MCP完成四类对象、全部专业动�
    const start=await ok('hetu_begin_creation',{brief:'雨港来信的隔离规划验收',locale:'zh-CN',operation_key:'begin'});
    const created=await ok('hetu_create_novel_from_project',{management_ref:start.management_ref,project_id:start.project.project_id,expected:{revision:start.revision,sha256:start.sha256},target_path:start.target_path,metadata:{title:'雨港来信',author_name:'验收作者',synopsis:'旧邮局的来信。',genre:'悬疑',language_tag:'zh-CN',status:'writing'},operation_key:'create'});
    management=created.workspace_management_ref;work={workspace_id:management.scope_ref.id,kind:'novel',object_id:created.novel.novel_id};
-   pkg=await ok('hetu_plugins_inspect_package',{package_directory:path.resolve('dist')});await apply('install');await discover();
+   pkg=await ok('hetu_plugins_inspect_package',{package_directory:packageDirectory});await apply('install');await discover();
    assert.equal(cap.actions.length,manifest.contributions.actions.length);assert.ok(cap.core_actions.some((a:any)=>a.name==='hetu.novels.snapshot'));assert.deepEqual((await client.listTools()).tools.map((x:any)=>x.name),tools);
    const content=newPlan('雨港来信','book');content.nodes.push(newNode('volume','第一卷','volume-a'),newNode('volume','第二卷','volume-b'));content.nodes[0].children=['volume-a','volume-b'];content.author_constraints='保留开放结局。';
    plan=await invoke('put_plan',{title:'雨港方案',content,source_refs:[],expected_revision:0,expected_sha256:'',operation_key:'create-plan'});

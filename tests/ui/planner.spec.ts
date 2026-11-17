@@ -14,12 +14,15 @@ const json=(command:string,args:string[],input?:unknown,env=process.env)=>{const
 
 test('NP完整工作面通过真实Electron、Core与机器入口共享成果',async({},info)=>{
  const directory=await mkdtemp(path.join(os.tmpdir(),'novel-planner-ui-')),workspace=path.join(directory,'中文小说'),access=path.join(directory,'access');
- const pkg=await PluginPackage.inspect(path.resolve('dist'));
+ const pkg=await PluginPackage.inspect(path.resolve(process.env.HETU_TEST_PACKAGE??'dist'));
+ const bin=process.env.HETU_TEST_BIN??path.join(host,'target/debug');
  const fixture=json(path.join(host,'target/debug/examples/plugin_fixture'),[workspace,access,path.join(pkg.source,'plugin.json'),pkg.sha256]);
  const env={...process.env,HETU_DESKTOP_PROFILE:path.join(directory,'profile'),HETU_COLLABORATION_DIR:path.join(directory,'hub'),HETU_PLUGIN_STATE_DIR:path.join(directory,'plugins'),HETU_PLUGIN_ACCESS_DIR:access,HETU_PLUGIN_NODE:process.execPath,HETU_PLUGIN_CLI:path.join(host,'target/debug/hetu-plugin'),HETU_APP_SERVER:path.join(host,'target/debug/hetu-app-server'),HETU_PLUGIN_MANAGER:path.join(host,'apps/desktop/dist/plugin-manager.mjs')};
- const call=(action:string,input:any)=>{const r=json(path.join(host,'target/debug/hetu'),['--client','codex','--collaboration-dir',env.HETU_COLLABORATION_DIR,'call',action,'--input','-'],input,env);expect(r.status,JSON.stringify(r)).toBe('succeeded');return r.data;};
+ env.HETU_PLUGIN_CLI=path.join(bin,'hetu-plugin');env.HETU_APP_SERVER=path.join(bin,'hetu-app-server');
+ if(process.env.HETU_PACKAGED_APP){expect(process.env.HETU_TEST_BIN).toBeTruthy();for(const key of ['HETU_PLUGIN_NODE','HETU_PLUGIN_CLI','HETU_APP_SERVER','HETU_PLUGIN_MANAGER','HETU_CLI','ELECTRON_RUN_AS_NODE'])delete (env as NodeJS.ProcessEnv)[key];}
+ const call=(action:string,input:any)=>{const r=json(path.join(bin,'hetu'),['--client','codex','--collaboration-dir',env.HETU_COLLABORATION_DIR,'call',action,'--input','-'],input,env);expect(r.status,JSON.stringify(r)).toBe('succeeded');return r.data;};
  const inspected=call('hetu.plugins.inspect_package',{package_directory:pkg.source});call('hetu.plugins.apply',{action:'install',plugin_id:pkg.manifest.id,package_directory:pkg.source,package_sha256:inspected.package_sha256,expected_sha256:call('hetu.plugins.inspect',{}).state_sha256,authorization_note:'明确安装小说规划测试包。',operation_key:'install'});
- const core=(action:string,input:any)=>{const r=spawnSync(env.HETU_PLUGIN_CLI,['--workspace',workspace,'--access-dir',access,'--grant',fixture.grant_id,'--package-sha256',pkg.sha256,'call',action,'--input','-'],{input:JSON.stringify(input),encoding:'utf8',timeout:30000,maxBuffer:2*1024*1024});expect(r.stdout,r.stderr).not.toBe('');return JSON.parse(r.stdout);};
+ const core=(action:string,input:any)=>{const r=spawnSync(path.join(bin,'hetu-plugin'),['--workspace',workspace,'--access-dir',access,'--grant',fixture.grant_id,'--package-sha256',pkg.sha256,'call',action,'--input','-'],{input:JSON.stringify(input),encoding:'utf8',timeout:30000,maxBuffer:2*1024*1024});expect(r.stdout,r.stderr).not.toBe('');return JSON.parse(r.stdout);};
  const backend=new BackendSupervisor({node:process.execPath,bootstrap:path.join(host,'apps/desktop/dist/plugin-worker.mjs'),snapshot:pkg.source,pkg,work_ref:fixture.work_ref,request:async(action:string,input:any)=>core(action,input)});
  await backend.initialize();let serial=0;
  const invoke=async(a:string,i:any)=>{const r=await backend.invoke(a,i);expect(r.status,JSON.stringify(r)).toBe('succeeded');return r.data;};
@@ -38,7 +41,7 @@ test('NP完整工作面通过真实Electron、Core与机器入口共享成果',a
  run=await invoke('patch_run',{...base(run),state:'running',steps:run.object.content.steps.map((step:any,i:number)=>i===0?{...step,status:'succeeded',message:'已读取本卷固定规划与来源。',result_ref:fixed(detail),evidence:{kind:'agent_report',locator:detail.object.object_id}}:step)});
 
 
- const app=await electron.launch({executablePath:createRequire(path.join(host,'package.json'))('electron'),args:[path.join(host,'apps/desktop')],env});
+ const app=await electron.launch({executablePath:process.env.HETU_PACKAGED_APP??createRequire(path.join(host,'package.json'))('electron'),args:process.env.HETU_PACKAGED_APP?[]:[path.join(host,'apps/desktop')],env});
  try{
   await app.evaluate(({dialog,clipboard},directory)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[directory]});dialog.showMessageBox=async()=>({response:1,checkboxChecked:false});let copied='';clipboard.writeText=(value:string)=>{copied=value;};clipboard.readText=()=>copied;},workspace);
   const shell=await app.firstWindow();await shell.getByRole('button',{name:'打开作品',exact:true}).first().click();await shell.getByRole('button',{name:/插件集成测试/}).click();
