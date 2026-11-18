@@ -1,0 +1,59 @@
+{
+  "recorded_at": "2026-11-18",
+  "version": "0.3.0",
+  "plugin_id": "org.wordflowlab.novel-planner",
+  "tested_source_commit": "6303ba5fccb053a86d6780b6db9622f9d61a8d90",
+  "package_sha256": "a38c3204bbb35fb075690f4ff2c991c63a136e09b34b8c24d67c93115de5df0c",
+  "host": {
+    "version": "0.11.11",
+    "source_commit": "6053f973a6740b6f4d7fca1bd69452b2bac3fa46",
+    "source_build": false,
+    "signature_verified": true
+  },
+  "platform": "macOS arm64",
+  "unit_tests": 33,
+  "declared_actions": 38,
+  "official_ci": {
+    "id": 44253986347,
+    "url": "https://github.com/wordflowlab/hetu-novel-planner/actions/runs/44253986347",
+    "result": "success"
+  },
+  "results": [
+    {
+      "test": "machine",
+      "exit_code": 0
+    },
+    {
+      "test": "ui",
+      "exit_code": 0
+    },
+    {
+      "test": "cross",
+      "exit_code": 0
+    }
+  ],
+  "same_codex_connection": {
+    "dynamic_discovery": true,
+    "packaged_skill_read": true,
+    "separate_codex_plugin": false
+  },
+  "compatibility": {
+    "optional_depth_version": 1,
+    "old_revision_preserved": true,
+    "destructive_downgrade_refused": true
+  },
+  "not_verified": [
+    "Windows/Linux专业业务旅程",
+    "文学质量与作者认可",
+    "付费模型",
+    "正文采纳及定稿"
+  ],
+  "earlier_failures_retained": [
+    "安装验收的默认透明度模拟未生效，经实际媒体查询改用CDP校验正常与减少透明度",
+    "旧页签列表分支已修复并复验",
+    "本机高负载导致的未知结果及超时不计为通过",
+    "页头选择器固定32px以满足原50px页头合同",
+    "完整工作面英文导航断言先展开实际折叠导航后再核验",
+    "44253682717队列中取消以补充联合回执保留，不计为通过"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "platform": "darwin arm64",
-  "package_sha256": "2e05158d8ee1076370e3d186491fdc83083cb3a19e8f66ff6ef3452aacadd1e9",
+  "package_sha256": "a38c3204bbb35fb075690f4ff2c991c63a136e09b34b8c24d67c93115de5df0c",
   "actions": [
     "skills.read",
     "put_plan",
@@ -11,7 +11,16 @@
     "get_timeline",
     "build_continuation_context",
     "list_continuities",
-    "get_continuity"
+    "get_continuity",
+    "save_depth",
+    "put_event_basis",
+    "put_temporal_constraint",
+    "put_knowledge_transition",
+    "preview_temporal_constraints",
+    "preview_knowledge",
+    "preview_continuity_impact",
+    "get_operation",
+    "inspect_basis"
   ],
   "candidate_source": true,
   "cli_mcp": true,
