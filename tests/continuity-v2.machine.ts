@@ -1,3 +1,4 @@
+import { runDepthScenario } from "./support/depth-scenario.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { writeFile, mkdir } from "node:fs/promises";
@@ -164,6 +165,7 @@ test(
           .sha256,
         r.sha256,
       );
+      await runDepthScenario(c, refs, evidence[0], plan_ref);
       assert.deepEqual(
         [...ids].filter((id) => !c.actions.has(id)),
         [],

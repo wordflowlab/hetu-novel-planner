@@ -307,6 +307,357 @@
         ]
       },
       "maxItems": 1000
+    },
+    "depth": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "event_basis": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "basis": {
+                "enum": [
+                  "observed",
+                  "planned",
+                  "hypothesis"
+                ]
+              },
+              "layer": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "branch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "depends_on_event_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "maxItems": 500
+              },
+              "source_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 99
+                },
+                "maxItems": 100
+              },
+              "review_status": {
+                "enum": [
+                  "checked",
+                  "needs_review"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "event_id",
+              "basis",
+              "layer",
+              "branch",
+              "depends_on_event_ids",
+              "source_indices",
+              "review_status"
+            ]
+          },
+          "maxItems": 1000
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "from": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "relation": {
+                "enum": [
+                  "before",
+                  "after",
+                  "simultaneous"
+                ]
+              },
+              "gap": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "min": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000000000
+                      },
+                      "max": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1000000000
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "unit": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "min",
+                      "max",
+                      "unit"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source_index": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 99
+                    },
+                    "byte_start": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100000000
+                    },
+                    "byte_end": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100000000
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 16000
+                    }
+                  },
+                  "required": [
+                    "source_index",
+                    "byte_start",
+                    "byte_end",
+                    "quote"
+                  ]
+                },
+                "maxItems": 100
+              }
+            },
+            "required": [
+              "id",
+              "from",
+              "to",
+              "relation",
+              "gap",
+              "evidence"
+            ]
+          },
+          "maxItems": 2000
+        },
+        "knowledge": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "entity_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "proposition": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "change": {
+                "enum": [
+                  "learn",
+                  "believe",
+                  "forget"
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source_index": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 99
+                    },
+                    "byte_start": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100000000
+                    },
+                    "byte_end": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100000000
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 16000
+                    }
+                  },
+                  "required": [
+                    "source_index",
+                    "byte_start",
+                    "byte_end",
+                    "quote"
+                  ]
+                },
+                "maxItems": 100
+              }
+            },
+            "required": [
+              "id",
+              "entity_ref",
+              "event_id",
+              "proposition",
+              "change",
+              "evidence"
+            ]
+          },
+          "maxItems": 2000
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "source_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 99
+              },
+              "status": {
+                "enum": [
+                  "unread",
+                  "read",
+                  "failed"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 1000
+              }
+            },
+            "required": [
+              "source_index",
+              "status",
+              "note"
+            ]
+          },
+          "maxItems": 100
+        },
+        "basis_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "owner_plugin_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "object_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000000
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "owner_plugin_id",
+              "object_id",
+              "revision",
+              "sha256"
+            ]
+          },
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "version",
+        "event_basis",
+        "constraints",
+        "knowledge",
+        "coverage"
+      ]
     }
   },
   "required": [

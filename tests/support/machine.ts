@@ -6,14 +6,12 @@ import path from "node:path";
 import os from "node:os";
 import assert from "node:assert/strict";
 import manifest from "../../contracts/plugin-manifest.json" with { type: "json" };
-const WORK_KIND="novel";
+const WORK_KIND = "novel";
 export const host = path.resolve(
   process.env.HETU_SOURCE ?? "../../limecloud/hetu",
 );
 export async function start() {
-  const directory = await mkdtemp(
-    path.join(os.tmpdir(), "hetu-prose-studio-"),
-  );
+  const directory = await mkdtemp(path.join(os.tmpdir(), "hetu-prose-studio-"));
   await mkdir(path.join(directory, "requests"));
   const packageDirectory = path.join(directory, "package");
   await cp(
@@ -43,9 +41,14 @@ export async function start() {
   };
   if (packaged) {
     for (const key of [
-      "HETU_PLUGIN_NODE", "HETU_PLUGIN_CLI", "HETU_APP_SERVER",
-      "HETU_PLUGIN_MANAGER", "HETU_CLI", "ELECTRON_RUN_AS_NODE",
-    ]) delete (env as Record<string, string | undefined>)[key];
+      "HETU_PLUGIN_NODE",
+      "HETU_PLUGIN_CLI",
+      "HETU_APP_SERVER",
+      "HETU_PLUGIN_MANAGER",
+      "HETU_CLI",
+      "ELECTRON_RUN_AS_NODE",
+    ])
+      delete (env as Record<string, string | undefined>)[key];
   }
   const resolve = createRequire(path.join(host, "apps/desktop/package.json"));
   const { Client } = await import(
@@ -102,12 +105,27 @@ export async function start() {
       locale: "zh-CN",
       operation_key: "begin",
     });
-    const created=await ok('hetu_create_novel_from_project',{
-      management_ref:begin.management_ref,project_id:begin.project.project_id,
-      expected:{revision:begin.revision,sha256:begin.sha256},target_path:begin.target_path,
-      metadata:{title:'雨港来信',author_name:'隔离验收作者',synopsis:'旧邮局来信',genre:'悬疑',language_tag:'zh-CN',status:'writing'},operation_key:'create'});
-    const management=created.workspace_management_ref,
-      work={workspace_id:management.scope_ref.id,kind:'novel',object_id:created.novel.novel_id};
+    const created = await ok("hetu_create_novel_from_project", {
+      management_ref: begin.management_ref,
+      project_id: begin.project.project_id,
+      expected: { revision: begin.revision, sha256: begin.sha256 },
+      target_path: begin.target_path,
+      metadata: {
+        title: "雨港来信",
+        author_name: "隔离验收作者",
+        synopsis: "旧邮局来信",
+        genre: "悬疑",
+        language_tag: "zh-CN",
+        status: "writing",
+      },
+      operation_key: "create",
+    });
+    const management = created.workspace_management_ref,
+      work = {
+        workspace_id: management.scope_ref.id,
+        kind: "novel",
+        object_id: created.novel.novel_id,
+      };
     const pkg = await ok("hetu_plugins_inspect_package", {
       package_directory: packageDirectory,
     });
@@ -138,7 +156,25 @@ export async function start() {
         arguments: args,
       });
     const invoke = async (action: string, args: any = {}) => {
-      const outer = await raw(action, args);
+      let outer = await raw(action, args);
+      if (
+        outer.status !== "succeeded" &&
+        args.operation_key &&
+        ["hetu.outcome_unknown", "hetu.plugin_operation_failed"].includes(
+          outer.error?.code,
+        )
+      ) {
+        const recovered = await raw("hetu.extensions.operations.get", {
+          operation_key: args.operation_key,
+        });
+        assert.equal(recovered.status, "succeeded", JSON.stringify(recovered));
+        const result = recovered.data.result;
+        if (result.status === "succeeded") outer = { ...recovered };
+        else if (result.error?.code === "not_found")
+          outer = await raw(action, args);
+        else
+          assert.fail("原操作仍未知，保留输入停止：" + JSON.stringify(result));
+      }
       assert.equal(outer.status, "succeeded", JSON.stringify(outer));
       assert.equal(
         outer.data.result.status,

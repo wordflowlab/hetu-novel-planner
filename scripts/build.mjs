@@ -1,3 +1,4 @@
+await import("./sync-capabilities.mjs");
 await import('./generate-continuity.mjs');
 import { build } from 'esbuild';
 import { mkdir, copyFile, readFile, writeFile, readdir, cp } from 'node:fs/promises';
@@ -10,8 +11,8 @@ for (const file of sources.files) {
 }
 const manifest = JSON.parse(await readFile('contracts/plugin-manifest.json','utf8'));
 await mkdir('dist',{recursive:true});
-const backend=await build({entryPoints:['src/backend.ts'],outfile:'dist/backend.mjs',bundle:true,platform:'node',format:'esm',target:'node25',metafile:true,banner:{js:'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);'}});
-const view=await build({entryPoints:['src/view/index.tsx'],outfile:'dist/view.js',bundle:true,platform:'browser',format:'iife',target:'chrome140',metafile:true,jsx:'automatic'});
+const backend=await build({entryPoints:['src/backend.ts'],outfile:'dist/backend.mjs',bundle:true,preserveSymlinks:true,minify:true,define:{'process.env.NODE_ENV':'\"production\"'},platform:'node',format:'esm',target:'node25',metafile:true,banner:{js:'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);'}});
+const view=await build({entryPoints:['src/view/index.tsx'],outfile:'dist/view.js',bundle:true,preserveSymlinks:true,minify:true,define:{'process.env.NODE_ENV':'\"production\"'},platform:'browser',format:'iife',target:'chrome140',metafile:true,jsx:'automatic'});
 await writeFile('dist/plugin.json',JSON.stringify(manifest)+'\n');
 await writeFile('dist/index.html','<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>小说规划</title><link rel="stylesheet" href="view.css"><div id="root"></div><script src="view.js"></script></html>');
 for (const name of ['LICENSE','CAPABILITIES.md']) await copyFile(name,'dist/'+name);

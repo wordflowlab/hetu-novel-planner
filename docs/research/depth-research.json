@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-18",
+  "references": [
+    {
+      "repository": "DrizzleGig/dsh-novel-beat",
+      "commit": "577d0995f9f47ba6b6a1398300089e7d42cb055a",
+      "path": "README.md",
+      "sha256": "c34042627c45618fd5cb7ade063fdfab40b7fa22bed3591aecd890e6b6a5a0b0",
+      "read_scope": "本轮定向源码／方法复核，未执行上游代码",
+      "code_copied": false
+    }
+  ],
+  "limitations": [
+    "独立实现，未主张与上游全功能相同",
+    "未以统计或模型来源评分判断文学质量"
+  ]
+}

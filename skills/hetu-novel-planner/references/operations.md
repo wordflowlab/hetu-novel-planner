@@ -1,6 +1,6 @@
 # 操作地图
 
-以包内正式清单为源；执行前发现当前安装版Schema。
+由包清单生成；执行前发现当前安装版Schema。
 
 | 动作 | 用途 | 必填参数 | 效果 |
 | --- | --- | --- | --- |
@@ -33,3 +33,12 @@
 | put_state | 维护人物状态 | object_id, expected_revision, expected_sha256, operation_key, state | managed_write |
 | get_timeline | 读取双时间线 | object_id, order | read |
 | build_continuation_context | 准备固定续写上下文 | object_id, goal, max_chars | read |
+| put_event_basis | 保存事件层次与依据 | object_id, expected_revision, expected_sha256, operation_key, event_basis | managed_write |
+| put_temporal_constraint | 保存事件偏序约束 | object_id, expected_revision, expected_sha256, operation_key, constraint | managed_write |
+| put_knowledge_transition | 保存人物信息变化 | object_id, expected_revision, expected_sha256, operation_key, transition | managed_write |
+| preview_temporal_constraints | 检查偏序与时距约束 | object_id | read |
+| preview_knowledge | 读取确切时点人物知情 | object_id, entity_ref, event_id | read |
+| preview_continuity_impact | 分析来源变化与后续依赖 | object_id, changed_source_indices | read |
+| save_depth | 保存明确专业深化结构 | object_id, expected_revision, expected_sha256, operation_key, depth | managed_write |
+| get_operation | 回读原专业操作 | operation_key | read |
+| inspect_basis | 读取同作品固定专业依据 | object_id, basis_index | read |

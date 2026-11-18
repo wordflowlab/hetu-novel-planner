@@ -2,7 +2,7 @@
  "manifest_version": 1,
  "host_api": "1",
  "id": "org.wordflowlab.novel-planner",
- "version": "0.2.0",
+ "version": "0.3.0",
  "display": {
   "zh-CN": "小说规划",
   "en": "Novel Planner"
@@ -1220,6 +1220,357 @@
         ]
        },
        "maxItems": 1000
+      },
+      "depth": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "version": {
+         "const": 1
+        },
+        "event_basis": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "basis": {
+            "enum": [
+             "observed",
+             "planned",
+             "hypothesis"
+            ]
+           },
+           "layer": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "branch": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "depends_on_event_ids": {
+            "type": "array",
+            "items": {
+             "type": "string",
+             "minLength": 1,
+             "maxLength": 100
+            },
+            "maxItems": 500
+           },
+           "source_indices": {
+            "type": "array",
+            "items": {
+             "type": "integer",
+             "minimum": 0,
+             "maximum": 99
+            },
+            "maxItems": 100
+           },
+           "review_status": {
+            "enum": [
+             "checked",
+             "needs_review"
+            ]
+           }
+          },
+          "required": [
+           "id",
+           "event_id",
+           "basis",
+           "layer",
+           "branch",
+           "depends_on_event_ids",
+           "source_indices",
+           "review_status"
+          ]
+         },
+         "maxItems": 1000
+        },
+        "constraints": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "from": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "to": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "relation": {
+            "enum": [
+             "before",
+             "after",
+             "simultaneous"
+            ]
+           },
+           "gap": {
+            "anyOf": [
+             {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+               "min": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000
+               },
+               "max": {
+                "anyOf": [
+                 {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000000
+                 },
+                 {
+                  "type": "null"
+                 }
+                ]
+               },
+               "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+               }
+              },
+              "required": [
+               "min",
+               "max",
+               "unit"
+              ]
+             },
+             {
+              "type": "null"
+             }
+            ]
+           },
+           "evidence": {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "source_index": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 99
+              },
+              "byte_start": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "byte_end": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "quote": {
+               "type": "string",
+               "minLength": 0,
+               "maxLength": 16000
+              }
+             },
+             "required": [
+              "source_index",
+              "byte_start",
+              "byte_end",
+              "quote"
+             ]
+            },
+            "maxItems": 100
+           }
+          },
+          "required": [
+           "id",
+           "from",
+           "to",
+           "relation",
+           "gap",
+           "evidence"
+          ]
+         },
+         "maxItems": 2000
+        },
+        "knowledge": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "entity_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "proposition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "change": {
+            "enum": [
+             "learn",
+             "believe",
+             "forget"
+            ]
+           },
+           "evidence": {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "source_index": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 99
+              },
+              "byte_start": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "byte_end": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "quote": {
+               "type": "string",
+               "minLength": 0,
+               "maxLength": 16000
+              }
+             },
+             "required": [
+              "source_index",
+              "byte_start",
+              "byte_end",
+              "quote"
+             ]
+            },
+            "maxItems": 100
+           }
+          },
+          "required": [
+           "id",
+           "entity_ref",
+           "event_id",
+           "proposition",
+           "change",
+           "evidence"
+          ]
+         },
+         "maxItems": 2000
+        },
+        "coverage": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "source_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+           },
+           "status": {
+            "enum": [
+             "unread",
+             "read",
+             "failed"
+            ]
+           },
+           "note": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000
+           }
+          },
+          "required": [
+           "source_index",
+           "status",
+           "note"
+          ]
+         },
+         "maxItems": 100
+        },
+        "basis_refs": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "owner_plugin_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "object_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+           },
+           "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+           }
+          },
+          "required": [
+           "owner_plugin_id",
+           "object_id",
+           "revision",
+           "sha256"
+          ]
+         },
+         "maxItems": 100
+        }
+       },
+       "required": [
+        "version",
+        "event_basis",
+        "constraints",
+        "knowledge",
+        "coverage"
+       ]
       }
      },
      "required": [
@@ -4623,6 +4974,357 @@
           ]
          },
          "maxItems": 1000
+        },
+        "depth": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "version": {
+           "const": 1
+          },
+          "event_basis": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "event_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "basis": {
+              "enum": [
+               "observed",
+               "planned",
+               "hypothesis"
+              ]
+             },
+             "layer": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "branch": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "depends_on_event_ids": {
+              "type": "array",
+              "items": {
+               "type": "string",
+               "minLength": 1,
+               "maxLength": 100
+              },
+              "maxItems": 500
+             },
+             "source_indices": {
+              "type": "array",
+              "items": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 99
+              },
+              "maxItems": 100
+             },
+             "review_status": {
+              "enum": [
+               "checked",
+               "needs_review"
+              ]
+             }
+            },
+            "required": [
+             "id",
+             "event_id",
+             "basis",
+             "layer",
+             "branch",
+             "depends_on_event_ids",
+             "source_indices",
+             "review_status"
+            ]
+           },
+           "maxItems": 1000
+          },
+          "constraints": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "from": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "to": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "relation": {
+              "enum": [
+               "before",
+               "after",
+               "simultaneous"
+              ]
+             },
+             "gap": {
+              "anyOf": [
+               {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                 "min": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000000
+                 },
+                 "max": {
+                  "anyOf": [
+                   {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000
+                   },
+                   {
+                    "type": "null"
+                   }
+                  ]
+                 },
+                 "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                 }
+                },
+                "required": [
+                 "min",
+                 "max",
+                 "unit"
+                ]
+               },
+               {
+                "type": "null"
+               }
+              ]
+             },
+             "evidence": {
+              "type": "array",
+              "items": {
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+                "source_index": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 99
+                },
+                "byte_start": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 100000000
+                },
+                "byte_end": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 100000000
+                },
+                "quote": {
+                 "type": "string",
+                 "minLength": 0,
+                 "maxLength": 16000
+                }
+               },
+               "required": [
+                "source_index",
+                "byte_start",
+                "byte_end",
+                "quote"
+               ]
+              },
+              "maxItems": 100
+             }
+            },
+            "required": [
+             "id",
+             "from",
+             "to",
+             "relation",
+             "gap",
+             "evidence"
+            ]
+           },
+           "maxItems": 2000
+          },
+          "knowledge": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "entity_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "event_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "proposition": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "change": {
+              "enum": [
+               "learn",
+               "believe",
+               "forget"
+              ]
+             },
+             "evidence": {
+              "type": "array",
+              "items": {
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+                "source_index": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 99
+                },
+                "byte_start": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 100000000
+                },
+                "byte_end": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "maximum": 100000000
+                },
+                "quote": {
+                 "type": "string",
+                 "minLength": 0,
+                 "maxLength": 16000
+                }
+               },
+               "required": [
+                "source_index",
+                "byte_start",
+                "byte_end",
+                "quote"
+               ]
+              },
+              "maxItems": 100
+             }
+            },
+            "required": [
+             "id",
+             "entity_ref",
+             "event_id",
+             "proposition",
+             "change",
+             "evidence"
+            ]
+           },
+           "maxItems": 2000
+          },
+          "coverage": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "source_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 99
+             },
+             "status": {
+              "enum": [
+               "unread",
+               "read",
+               "failed"
+              ]
+             },
+             "note": {
+              "type": "string",
+              "minLength": 0,
+              "maxLength": 1000
+             }
+            },
+            "required": [
+             "source_index",
+             "status",
+             "note"
+            ]
+           },
+           "maxItems": 100
+          },
+          "basis_refs": {
+           "type": "array",
+           "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "owner_plugin_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "object_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+             },
+             "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000
+             },
+             "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+             }
+            },
+            "required": [
+             "owner_plugin_id",
+             "object_id",
+             "revision",
+             "sha256"
+            ]
+           },
+           "maxItems": 100
+          }
+         },
+         "required": [
+          "version",
+          "event_basis",
+          "constraints",
+          "knowledge",
+          "coverage"
+         ]
         }
        },
        "required": [
@@ -5103,13 +5805,911 @@
       "max_chars"
      ]
     }
+   },
+   {
+    "id": "put_event_basis",
+    "title": "保存事件层次与依据",
+    "effect": "managed_write",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "expected_revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "expected_sha256": {
+       "type": "string",
+       "pattern": "^[a-f0-9]{64}$"
+      },
+      "operation_key": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "event_basis": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "event_id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "basis": {
+         "enum": [
+          "observed",
+          "planned",
+          "hypothesis"
+         ]
+        },
+        "layer": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "branch": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "depends_on_event_ids": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+         },
+         "maxItems": 500
+        },
+        "source_indices": {
+         "type": "array",
+         "items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 99
+         },
+         "maxItems": 100
+        },
+        "review_status": {
+         "enum": [
+          "checked",
+          "needs_review"
+         ]
+        }
+       },
+       "required": [
+        "id",
+        "event_id",
+        "basis",
+        "layer",
+        "branch",
+        "depends_on_event_ids",
+        "source_indices",
+        "review_status"
+       ]
+      }
+     },
+     "required": [
+      "object_id",
+      "expected_revision",
+      "expected_sha256",
+      "operation_key",
+      "event_basis"
+     ]
+    }
+   },
+   {
+    "id": "put_temporal_constraint",
+    "title": "保存事件偏序约束",
+    "effect": "managed_write",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "expected_revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "expected_sha256": {
+       "type": "string",
+       "pattern": "^[a-f0-9]{64}$"
+      },
+      "operation_key": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "constraint": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "from": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "to": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "relation": {
+         "enum": [
+          "before",
+          "after",
+          "simultaneous"
+         ]
+        },
+        "gap": {
+         "anyOf": [
+          {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "min": {
+             "type": "number",
+             "minimum": 0,
+             "maximum": 1000000000
+            },
+            "max": {
+             "anyOf": [
+              {
+               "type": "number",
+               "minimum": 0,
+               "maximum": 1000000000
+              },
+              {
+               "type": "null"
+              }
+             ]
+            },
+            "unit": {
+             "type": "string",
+             "minLength": 1,
+             "maxLength": 100
+            }
+           },
+           "required": [
+            "min",
+            "max",
+            "unit"
+           ]
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "evidence": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "source_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+           },
+           "byte_start": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+           },
+           "byte_end": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+           },
+           "quote": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 16000
+           }
+          },
+          "required": [
+           "source_index",
+           "byte_start",
+           "byte_end",
+           "quote"
+          ]
+         },
+         "maxItems": 100
+        }
+       },
+       "required": [
+        "id",
+        "from",
+        "to",
+        "relation",
+        "gap",
+        "evidence"
+       ]
+      }
+     },
+     "required": [
+      "object_id",
+      "expected_revision",
+      "expected_sha256",
+      "operation_key",
+      "constraint"
+     ]
+    }
+   },
+   {
+    "id": "put_knowledge_transition",
+    "title": "保存人物信息变化",
+    "effect": "managed_write",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "expected_revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "expected_sha256": {
+       "type": "string",
+       "pattern": "^[a-f0-9]{64}$"
+      },
+      "operation_key": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "transition": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "entity_ref": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "event_id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "proposition": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "change": {
+         "enum": [
+          "learn",
+          "believe",
+          "forget"
+         ]
+        },
+        "evidence": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "source_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+           },
+           "byte_start": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+           },
+           "byte_end": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+           },
+           "quote": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 16000
+           }
+          },
+          "required": [
+           "source_index",
+           "byte_start",
+           "byte_end",
+           "quote"
+          ]
+         },
+         "maxItems": 100
+        }
+       },
+       "required": [
+        "id",
+        "entity_ref",
+        "event_id",
+        "proposition",
+        "change",
+        "evidence"
+       ]
+      }
+     },
+     "required": [
+      "object_id",
+      "expected_revision",
+      "expected_sha256",
+      "operation_key",
+      "transition"
+     ]
+    }
+   },
+   {
+    "id": "preview_temporal_constraints",
+    "title": "检查偏序与时距约束",
+    "effect": "read",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      }
+     },
+     "required": [
+      "object_id"
+     ]
+    }
+   },
+   {
+    "id": "preview_knowledge",
+    "title": "读取确切时点人物知情",
+    "effect": "read",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "entity_ref": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "event_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      }
+     },
+     "required": [
+      "object_id",
+      "entity_ref",
+      "event_id"
+     ]
+    }
+   },
+   {
+    "id": "preview_continuity_impact",
+    "title": "分析来源变化与后续依赖",
+    "effect": "read",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "changed_source_indices": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 99
+       },
+       "maxItems": 100
+      }
+     },
+     "required": [
+      "object_id",
+      "changed_source_indices"
+     ]
+    }
+   },
+   {
+    "id": "save_depth",
+    "title": "保存明确专业深化结构",
+    "effect": "managed_write",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "expected_revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "expected_sha256": {
+       "type": "string",
+       "pattern": "^[a-f0-9]{64}$"
+      },
+      "operation_key": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "depth": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "version": {
+         "const": 1
+        },
+        "event_basis": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "basis": {
+            "enum": [
+             "observed",
+             "planned",
+             "hypothesis"
+            ]
+           },
+           "layer": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "branch": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "depends_on_event_ids": {
+            "type": "array",
+            "items": {
+             "type": "string",
+             "minLength": 1,
+             "maxLength": 100
+            },
+            "maxItems": 500
+           },
+           "source_indices": {
+            "type": "array",
+            "items": {
+             "type": "integer",
+             "minimum": 0,
+             "maximum": 99
+            },
+            "maxItems": 100
+           },
+           "review_status": {
+            "enum": [
+             "checked",
+             "needs_review"
+            ]
+           }
+          },
+          "required": [
+           "id",
+           "event_id",
+           "basis",
+           "layer",
+           "branch",
+           "depends_on_event_ids",
+           "source_indices",
+           "review_status"
+          ]
+         },
+         "maxItems": 1000
+        },
+        "constraints": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "from": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "to": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "relation": {
+            "enum": [
+             "before",
+             "after",
+             "simultaneous"
+            ]
+           },
+           "gap": {
+            "anyOf": [
+             {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+               "min": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000
+               },
+               "max": {
+                "anyOf": [
+                 {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000000
+                 },
+                 {
+                  "type": "null"
+                 }
+                ]
+               },
+               "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+               }
+              },
+              "required": [
+               "min",
+               "max",
+               "unit"
+              ]
+             },
+             {
+              "type": "null"
+             }
+            ]
+           },
+           "evidence": {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "source_index": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 99
+              },
+              "byte_start": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "byte_end": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "quote": {
+               "type": "string",
+               "minLength": 0,
+               "maxLength": 16000
+              }
+             },
+             "required": [
+              "source_index",
+              "byte_start",
+              "byte_end",
+              "quote"
+             ]
+            },
+            "maxItems": 100
+           }
+          },
+          "required": [
+           "id",
+           "from",
+           "to",
+           "relation",
+           "gap",
+           "evidence"
+          ]
+         },
+         "maxItems": 2000
+        },
+        "knowledge": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "entity_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "proposition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "change": {
+            "enum": [
+             "learn",
+             "believe",
+             "forget"
+            ]
+           },
+           "evidence": {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "source_index": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 99
+              },
+              "byte_start": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "byte_end": {
+               "type": "integer",
+               "minimum": 0,
+               "maximum": 100000000
+              },
+              "quote": {
+               "type": "string",
+               "minLength": 0,
+               "maxLength": 16000
+              }
+             },
+             "required": [
+              "source_index",
+              "byte_start",
+              "byte_end",
+              "quote"
+             ]
+            },
+            "maxItems": 100
+           }
+          },
+          "required": [
+           "id",
+           "entity_ref",
+           "event_id",
+           "proposition",
+           "change",
+           "evidence"
+          ]
+         },
+         "maxItems": 2000
+        },
+        "coverage": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "source_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+           },
+           "status": {
+            "enum": [
+             "unread",
+             "read",
+             "failed"
+            ]
+           },
+           "note": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000
+           }
+          },
+          "required": [
+           "source_index",
+           "status",
+           "note"
+          ]
+         },
+         "maxItems": 100
+        },
+        "basis_refs": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "owner_plugin_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "object_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+           },
+           "revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+           },
+           "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+           }
+          },
+          "required": [
+           "owner_plugin_id",
+           "object_id",
+           "revision",
+           "sha256"
+          ]
+         },
+         "maxItems": 100
+        }
+       },
+       "required": [
+        "version",
+        "event_basis",
+        "constraints",
+        "knowledge",
+        "coverage"
+       ]
+      }
+     },
+     "required": [
+      "object_id",
+      "expected_revision",
+      "expected_sha256",
+      "operation_key",
+      "depth"
+     ]
+    }
+   },
+   {
+    "id": "get_operation",
+    "title": "回读原专业操作",
+    "effect": "read",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "operation_key": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 200
+      }
+     },
+     "required": [
+      "operation_key"
+     ]
+    }
+   },
+   {
+    "id": "inspect_basis",
+    "title": "读取同作品固定专业依据",
+    "effect": "read",
+    "input_schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "object_id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      },
+      "revision": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 1000000
+      },
+      "basis_index": {
+       "type": "integer",
+       "minimum": 0,
+       "maximum": 99
+      }
+     },
+     "required": [
+      "object_id",
+      "basis_index"
+     ]
+    }
    }
   ],
   "skills": [
    {
     "id": "novel-planner",
     "name": "hetu-novel-planner",
-    "description": "复盘已有小说，再推进后续总纲、卷纲、章纲、场景节拍及可返工的续写参考稿；也支持新书和局部重规划。",
+    "description": "在河图中复盘既有稿、规划整书卷章，比较走向并核对事件时序、人物知情与后续影响，为宿主续写候选准备固定依据。",
     "entry": "skills/hetu-novel-planner/SKILL.md"
    }
   ]

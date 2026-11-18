@@ -1,3 +1,4 @@
+import { DepthView } from "./depth-view.tsx";
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { unwrap, type PluginBridge } from "../../vendor/hetu-sdk.ts";
@@ -111,6 +112,9 @@ function App() {
           ["decisions", "方向比较"],
           ["events", "时间线"],
           ["states", "人物状态"],
+          ["constraints", "偏序约束"],
+          ["knowledge", "人物知情"],
+          ["impact", "修改影响"],
         ].map(([id, label]) => (
           <button
             key={id}
@@ -154,7 +158,22 @@ function App() {
                 </select>
               </label>
             )}
-            {[...p[tab]]
+            {["constraints", "knowledge", "impact"].includes(tab) && (
+              <DepthView
+                key={tab}
+                p={p}
+                tab={tab}
+                invoke={(a, i) =>
+                  call(a, {
+                    object_id: r.object.object_id,
+                    revision: r.object.revision,
+                    ...i,
+                  })
+                }
+                onError={(e) => setError(String(e))}
+              />
+            )}
+            {[...(p[tab] ?? [])]
               .sort((a: any, b: any) =>
                 tab !== "events"
                   ? 0
@@ -171,7 +190,12 @@ function App() {
               .map((v: any) => (
                 <article key={v.id}>
                   <h3>{v.title ?? "人物状态"}</h3>
-                  {v.entity_ref && <details><summary>对象引用</summary><code>{v.entity_ref}</code></details>}
+                  {v.entity_ref && (
+                    <details>
+                      <summary>对象引用</summary>
+                      <code>{v.entity_ref}</code>
+                    </details>
+                  )}
                   {v.question && <p>{v.question}</p>}
                   {v.options && (
                     <div className="compare">
@@ -205,7 +229,10 @@ function App() {
                   ))}
                 </article>
               ))}
-            {!p[tab].length && <p>此项尚未整理，可让Agent基于固定依据补齐。</p>}
+            {!["constraints", "knowledge", "impact"].includes(tab) &&
+              !(p[tab] ?? []).length && (
+                <p>此项尚未整理，可让Agent基于固定依据补齐。</p>
+              )}
           </>
         )}
       </main>

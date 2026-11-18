@@ -1,3 +1,4 @@
+import { validateDepth, depthWrites } from "./depth.ts";
 import * as validators from "./validators.ts";
 import {
   requireValue as need,
@@ -7,6 +8,8 @@ import {
 import manifest from "../../contracts/plugin-manifest.json" with { type: "json" };
 export { clone, canonical };
 export const ids = new Set([
+  "get_operation",
+  "inspect_basis",
   "list_continuities",
   "get_continuity",
   "save_continuity",
@@ -22,6 +25,15 @@ export const effects = new Set([
   "put_event",
   "put_state",
 ]);
+for (const a of manifest.contributions.actions)
+  if (
+    a.id === "save_depth" ||
+    a.id in depthWrites ||
+    a.id.startsWith("preview_")
+  ) {
+    ids.add(a.id);
+    if (a.effect === "managed_write") effects.add(a.id);
+  }
 export function validateAction(action: string, input: unknown) {
   const f = (validators as any)[action];
   need(f && f(input), "连续性动作参数无效：" + JSON.stringify(f?.errors));
@@ -29,6 +41,7 @@ export function validateAction(action: string, input: unknown) {
 export function validate(p: any) {
   const f = (validators as any).continuity;
   need(f(p), "连续性数据无效：" + JSON.stringify(f.errors));
+  validateDepth(p);
   for (const key of ["decisions", "events", "states"])
     need(
       new Set(p[key].map((v: any) => v.id)).size === p[key].length,
