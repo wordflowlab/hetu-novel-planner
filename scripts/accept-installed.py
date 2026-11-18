@@ -53,3 +53,19 @@ for test in ['machine','ui']:
  command=([str(bin_dir/'node'),'node_modules/@playwright/test/cli.js','test'] if test=='ui' else [str(bin_dir/'node'),'--experimental-strip-types','--test','--test-concurrency=1','tests/machine.integration.test.ts','tests/continuity-v2.machine.ts'])
  with (EVIDENCE/(test+'.log')).open('w') as log:r=subprocess.run(command,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1200)
  results.append({'test':test,'exit_code':r.returncode});(EVIDENCE/'results.json').write_text(json.dumps(results,indent=2)+'\n');print(slug,results[-1],flush=True);assert r.returncode==0,'保留失败，先回读原操作'
+
+if slug=="novel-planner":
+ peers=ROOT/"output/depth-peers";peers.mkdir(exist_ok=True)
+ for peer in lock["peers"]:
+  s=peer["slug"];directory=peers/("hetu-"+s+"-depth")
+  if not directory.exists():
+   run(["git","clone","--quiet","https://github.com/wordflowlab/hetu-"+s+".git",str(directory)])
+   run(["git","checkout","--detach",peer["source_commit"]],cwd=directory)
+   run(["npm","ci"],cwd=directory);run(["npm","run","build"],cwd=directory)
+  assert run(["git","rev-parse","HEAD"],cwd=directory)==peer["source_commit"]
+  assert package_sha(directory/"dist")==peer["package_sha256"]
+ current=peers/"hetu-novel-planner-depth"
+ if not current.exists():current.symlink_to(ROOT,target_is_directory=True)
+ env["HETU_DEPTH_ROOT"]=str(peers)
+ with (EVIDENCE/"cross.log").open("w") as log:r=subprocess.run([str(bin_dir/"node"),"--experimental-strip-types","--test","tests/cross-depth.integration.ts"],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1800)
+ results.append({"test":"cross","exit_code":r.returncode});(EVIDENCE/"results.json").write_text(json.dumps(results,indent=2)+"\n");print(slug,results[-1],flush=True);assert r.returncode==0

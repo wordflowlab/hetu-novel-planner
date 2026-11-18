@@ -8,5 +8,22 @@
     "slug": "novel-planner",
     "version": "0.3.0",
     "package_sha256": "8831d500a7ee54e52b6d6859e2327752c8ebdc0b1797f3129be1c0e07987de32"
-  }
+  },
+  "peers": [
+    {
+      "slug": "novel-review",
+      "source_commit": "07d0cd26cbec32af6a83c1a7ce05b91adb32b2f0",
+      "package_sha256": "a2353a6d438a97e55e7a749727a9d66b290e0e55fdaa026fe1f01f2b802d755c"
+    },
+    {
+      "slug": "novel-atlas",
+      "source_commit": "92a9ac5a8303da6936bde3857afb6b8a3938138d",
+      "package_sha256": "f7f0a8e7c75f3603b9b28f609137870b9cc54ffcec2f345303d9633c5cdda52b"
+    },
+    {
+      "slug": "prose-studio",
+      "source_commit": "8d3d9774ab1beac8e408c96a1c0ef10546365d4e",
+      "package_sha256": "376689d21aaed7d18495951ae3d26a3fbfd5360b8215b34a7d07e70adc3ec349"
+    }
+  ]
 }
