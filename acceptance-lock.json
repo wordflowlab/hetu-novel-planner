@@ -7,7 +7,7 @@
   "plugin": {
     "slug": "novel-planner",
     "version": "0.3.0",
-    "package_sha256": "8831d500a7ee54e52b6d6859e2327752c8ebdc0b1797f3129be1c0e07987de32"
+    "package_sha256": "a38c3204bbb35fb075690f4ff2c991c63a136e09b34b8c24d67c93115de5df0c"
   },
   "peers": [
     {
