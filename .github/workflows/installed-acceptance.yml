@@ -53,5 +53,7 @@ jobs:
             plugin/output/installed-acceptance/*.png
             plugin/output/installed-acceptance/*.log
             plugin/test-results/
+            plugin/docs/research/continuity-v2-acceptance.json
+            plugin/docs/research/cross-depth-acceptance.json
           if-no-files-found: ignore
           retention-days: 30
