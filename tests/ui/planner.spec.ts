@@ -1,149 +1,16 @@
-import { test, expect, _electron as electron } from "@playwright/test";
-import { mkdtemp, readFile, writeFile } from "node:fs/promises";
-import { spawnSync } from "node:child_process";
-import { pathToFileURL } from "node:url";
+import {test,expect,_electron as electron} from "@playwright/test";
+import {readFile,writeFile} from "node:fs/promises";
 import path from "node:path";
-import os from "node:os";
-import { createRequire } from "node:module";
-import { newPlan, newNode, newDetail } from "../../src/domain/model.ts";
-
-const host = path.resolve(process.env.HETU_SOURCE ?? "../../limecloud/hetu");
-const { PluginPackage } = await import(
-  pathToFileURL(path.join(host, "packages/plugin-host/src/package.ts")).href
-);
-const { BackendSupervisor } = await import(
-  pathToFileURL(path.join(host, "packages/plugin-host/src/backend.ts")).href
-);
-const json = (
-  command: string,
-  args: string[],
-  input?: unknown,
-  env = process.env,
-) => {
-  const r = spawnSync(command, args, {
-    input: input === undefined ? undefined : JSON.stringify(input),
-    env,
-    encoding: "utf8",
-    timeout: 60000,
-    maxBuffer: 4 * 1024 * 1024,
-  });
-  expect(r.status, r.stderr || r.stdout).toBe(0);
-  return JSON.parse(r.stdout);
-};
+import {createRequire} from "node:module";
+import {newPlan,newNode,newDetail} from "../../src/domain/model.ts";
+import {start,host} from "../support/machine.ts";
+import {importText} from "../support/import.ts";
 
 test("NP完整工作面通过真实Electron、Core与机器入口共享成果", async ({}, info) => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), "novel-planner-ui-")),
-    workspace = path.join(directory, "中文小说"),
-    access = path.join(directory, "access");
-  const pkg = await PluginPackage.inspect(
-    path.resolve(process.env.HETU_TEST_PACKAGE ?? "dist"),
-  );
-  const bin = process.env.HETU_TEST_BIN ?? path.join(host, "target/debug");
-  const fixture = json(
-    path.join(host, "target/debug/examples/plugin_fixture"),
-    [workspace, access, path.join(pkg.source, "plugin.json"), pkg.sha256],
-  );
-  const env = {
-    ...process.env,
-    HETU_DESKTOP_PROFILE: path.join(directory, "profile"),
-    HETU_COLLABORATION_DIR: path.join(directory, "hub"),
-    HETU_PLUGIN_STATE_DIR: path.join(directory, "plugins"),
-    HETU_PLUGIN_ACCESS_DIR: access,
-    HETU_PLUGIN_NODE: process.execPath,
-    HETU_PLUGIN_CLI: path.join(host, "target/debug/hetu-plugin"),
-    HETU_APP_SERVER: path.join(host, "target/debug/hetu-app-server"),
-    HETU_PLUGIN_MANAGER: path.join(
-      host,
-      "apps/desktop/dist/plugin-manager.mjs",
-    ),
-  };
-  env.HETU_PLUGIN_CLI = path.join(bin, "hetu-plugin");
-  env.HETU_APP_SERVER = path.join(bin, "hetu-app-server");
-  if (process.env.HETU_PACKAGED_APP) {
-    expect(process.env.HETU_TEST_BIN).toBeTruthy();
-    for (const key of [
-      "HETU_PLUGIN_NODE",
-      "HETU_PLUGIN_CLI",
-      "HETU_APP_SERVER",
-      "HETU_PLUGIN_MANAGER",
-      "HETU_CLI",
-      "ELECTRON_RUN_AS_NODE",
-    ])
-      delete (env as NodeJS.ProcessEnv)[key];
-  }
-  const call = (action: string, input: any) => {
-    const r = json(
-      path.join(bin, "hetu"),
-      [
-        "--client",
-        "codex",
-        "--collaboration-dir",
-        env.HETU_COLLABORATION_DIR,
-        "call",
-        action,
-        "--input",
-        "-",
-      ],
-      input,
-      env,
-    );
-    expect(r.status, JSON.stringify(r)).toBe("succeeded");
-    return r.data;
-  };
-  const inspected = call("hetu.plugins.inspect_package", {
-    package_directory: pkg.source,
-  });
-  call("hetu.plugins.apply", {
-    action: "install",
-    plugin_id: pkg.manifest.id,
-    package_directory: pkg.source,
-    package_sha256: inspected.package_sha256,
-    expected_sha256: call("hetu.plugins.inspect", {}).state_sha256,
-    authorization_note: "明确安装小说规划测试包。",
-    operation_key: "install",
-  });
-  const core = (action: string, input: any) => {
-    const r = spawnSync(
-      path.join(bin, "hetu-plugin"),
-      [
-        "--workspace",
-        workspace,
-        "--access-dir",
-        access,
-        "--grant",
-        fixture.grant_id,
-        "--package-sha256",
-        pkg.sha256,
-        "call",
-        action,
-        "--input",
-        "-",
-      ],
-      {
-        input: JSON.stringify(input),
-        encoding: "utf8",
-        timeout: 30000,
-        maxBuffer: 2 * 1024 * 1024,
-      },
-    );
-    expect(r.stdout, r.stderr).not.toBe("");
-    return JSON.parse(r.stdout);
-  };
-  const backend = new BackendSupervisor({
-    node: process.execPath,
-    bootstrap: path.join(host, "apps/desktop/dist/plugin-worker.mjs"),
-    snapshot: pkg.source,
-    pkg,
-    work_ref: fixture.work_ref,
-    request: async (action: string, input: any) => core(action, input),
-  });
-  await backend.initialize();
-  let serial = 0;
-  const invoke = async (a: string, i: any) => {
-    const r = await backend.invoke(a, i);
-    expect(r.status, JSON.stringify(r)).toBe("succeeded");
-    return r.data;
-  };
+  const c=await start(),directory=c.directory,workspace=c.workspace,env=c.env,pkg={sha256:c.pkg.package_sha256};
+  const fixture={work_ref:c.work,source_refs:await importText(c,["雨港旧邮局里，江岚收到一封没有署名的来信。\n"])};
+  let serial=0;
+  const invoke=(a:string,i:any)=>c.invoke(a,i);
   const fixed = (r: any) => ({
     object_id: r.object.object_id,
     revision: r.object.revision,
@@ -365,7 +232,7 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
       .getByRole("button", { name: "打开作品", exact: true })
       .first()
       .click();
-    await shell.getByRole("button", { name: /插件集成测试/ }).click();
+    await shell.getByRole("button", { name: "雨港来信",exact:true }).click();
     app.context().on("page", (page) => {
       page.on("pageerror", (error) =>
         console.error("Plugin page error:", error.message),
@@ -794,7 +661,7 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
       ),
     );
   } finally {
-    await backend.dispose();
+    await c.client.close();
     await app.close();
   }
 });
