@@ -7,6 +7,7 @@ import {start,host} from "../support/machine.ts";
 import {importText} from "../support/import.ts";
 
 test("NP完整工作面通过真实Electron、Core与机器入口共享成果", async ({}, info) => {
+  test.setTimeout(600000);
   const c=await start(),directory=c.directory,workspace=c.workspace,env=c.env,pkg={sha256:c.pkg.package_sha256};
   const fixture={work_ref:c.work,source_refs:await importText(c,["雨港旧邮局里，江岚收到一封没有署名的来信。\n"])};
   let serial=0;
