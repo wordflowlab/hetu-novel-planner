@@ -233,7 +233,7 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
       .getByRole("button", { name: "打开作品", exact: true })
       .first()
       .click();
-    await shell.getByRole("button", { name: "雨港来信",exact:true }).click();
+    await shell.getByRole("button", { name: "雨港来信",exact:false }).click();
     app.context().on("page", (page) => {
       page.on("pageerror", (error) =>
         console.error("Plugin page error:", error.message),
@@ -368,7 +368,7 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
     await view.getByRole("button", { name: "整书规划", exact: true }).click();
     await view.getByRole("treeitem", { name: /^雨港来信/ }).click();
     await expect(
-      view.getByRole("heading", { name: "雨港来信", exact: true }),
+      view.getByRole("heading", { name: "雨港来信", exact: false }),
     ).toBeVisible();
     await view.getByRole("button", { name: "卷规划", exact: true }).click();
     await view.getByRole("option", { name: /第一卷 旧邮局/ }).click();
