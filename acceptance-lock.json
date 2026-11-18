@@ -12,18 +12,18 @@
   "peers": [
     {
       "slug": "novel-review",
-      "source_commit": "07d0cd26cbec32af6a83c1a7ce05b91adb32b2f0",
+      "source_commit": "eacfe24ac19e5c898199e8f3308ef812a03fb41b",
       "package_sha256": "a2353a6d438a97e55e7a749727a9d66b290e0e55fdaa026fe1f01f2b802d755c"
     },
     {
       "slug": "novel-atlas",
-      "source_commit": "92a9ac5a8303da6936bde3857afb6b8a3938138d",
-      "package_sha256": "f7f0a8e7c75f3603b9b28f609137870b9cc54ffcec2f345303d9633c5cdda52b"
+      "source_commit": "45d9346749dfda216babda289fefbec187441959",
+      "package_sha256": "3b0b6006069eb0b2c70c709ee9a3ed2bd006b4491946a161748389e77a46d298"
     },
     {
       "slug": "prose-studio",
-      "source_commit": "8d3d9774ab1beac8e408c96a1c0ef10546365d4e",
-      "package_sha256": "376689d21aaed7d18495951ae3d26a3fbfd5360b8215b34a7d07e70adc3ec349"
+      "source_commit": "c0b181f2e9a754e2c303304ac0aafede04f585ca",
+      "package_sha256": "5005ec439334b5babd9d9bd35b3a7575185b55df67f3ea3623ed3c21226c3c7f"
     }
   ]
 }
