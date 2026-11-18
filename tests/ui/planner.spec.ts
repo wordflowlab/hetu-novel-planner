@@ -601,14 +601,7 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
     });
     await view.setViewportSize({ width: 1360, height: 900 });
     await expect.poll(() => view.evaluate(() => innerWidth)).toBe(1360);
-    call("hetu.plugins.apply", {
-      action: "disable",
-      plugin_id: pkg.manifest.id,
-      package_sha256: pkg.sha256,
-      expected_sha256: call("hetu.plugins.inspect", {}).state_sha256,
-      authorization_note: "明确停用隔离测试插件。",
-      operation_key: "disable",
-    });
+    await c.apply("disable");
     await expect(shell.locator(".workbench-topbar")).toBeVisible();
     await expect(shell.locator(".plugin-page-navigation")).toHaveCount(0);
     await expect(shell.getByRole("status")).toContainText("插件状态已更新");
