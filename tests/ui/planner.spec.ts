@@ -583,6 +583,15 @@ test("NP完整工作面通过真实Electron、Core与机器入口共享成果", 
     ).toBeVisible();
     await expect(view.locator("html")).toHaveAttribute("data-theme", "dark");
     await expect(
+      view.getByRole("heading", { name: "Relationships", exact: true }),
+    ).toBeVisible();
+    const navigationToggle = view.locator(".layout-toggle").first();
+    if ((await navigationToggle.getAttribute("aria-expanded")) === "false")
+      await view
+        .getByRole("button", { name: "Show planner navigation", exact: true })
+        .click();
+    await expect(navigationToggle).toHaveAttribute("aria-expanded", "true");
+    await expect(
       view.getByRole("button", { name: "Relationships", exact: true }),
     ).toBeVisible();
     await view.screenshot({
