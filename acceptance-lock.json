@@ -12,17 +12,17 @@
   "peers": [
     {
       "slug": "novel-review",
-      "source_commit": "eacfe24ac19e5c898199e8f3308ef812a03fb41b",
-      "package_sha256": "a2353a6d438a97e55e7a749727a9d66b290e0e55fdaa026fe1f01f2b802d755c"
+      "source_commit": "33b7302d0ece3834af7067b7d6f63ddc84718b6f",
+      "package_sha256": "f5eceea32772e9028ddaf36607ceb2c4eddd0a70eb17373e4c4bf871c21c18f4"
     },
     {
       "slug": "novel-atlas",
-      "source_commit": "45d9346749dfda216babda289fefbec187441959",
+      "source_commit": "2dd292e63bd82b70a2b5a24c6ce092dce76bca63",
       "package_sha256": "3b0b6006069eb0b2c70c709ee9a3ed2bd006b4491946a161748389e77a46d298"
     },
     {
       "slug": "prose-studio",
-      "source_commit": "c0b181f2e9a754e2c303304ac0aafede04f585ca",
+      "source_commit": "4338d7389d18222a446ccfefeee248f06961d973",
       "package_sha256": "5005ec439334b5babd9d9bd35b3a7575185b55df67f3ea3623ed3c21226c3c7f"
     }
   ]
