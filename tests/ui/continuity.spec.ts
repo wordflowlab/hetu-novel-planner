@@ -158,6 +158,7 @@ test("真实Electron专业工作面、AI交接、固定导出、冲突与重开"
       });
     }
     await buttons[0].click();
+    await page.emulateMedia({ reducedTransparency: "no-preference" });
     expect(
       await page.evaluate(
         () => getComputedStyle(document.body).backgroundImage,

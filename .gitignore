@@ -4,3 +4,5 @@ output/
 test-results/
 playwright-report/
 !package-lock.json
+
+/node_modules

@@ -21,8 +21,21 @@ test("有数据的专业深化工作面、真实计算、浅暗窄窗与键盘",
       expected_sha256: "",
       operation_key: "ui-plan",
     });
-    const content=fixtureContent({object_id:plan.object.object_id,revision:plan.object.revision,sha256:plan.sha256},ev);
-    const record=await c.invoke("save_continuity",{content,source_refs:refs,expected_revision:0,expected_sha256:"",operation_key:"ui-depth"});
+    const content = fixtureContent(
+      {
+        object_id: plan.object.object_id,
+        revision: plan.object.revision,
+        sha256: plan.sha256,
+      },
+      ev,
+    );
+    const record = await c.invoke("save_continuity", {
+      content,
+      source_refs: refs,
+      expected_revision: 0,
+      expected_sha256: "",
+      operation_key: "ui-depth",
+    });
     app = await electron.launch({
       executablePath:
         process.env.HETU_PACKAGED_APP ??
